@@ -1,37 +1,45 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+// import { useState } from "react";
+import { BaseSyntheticEvent, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
+  const [todoState, setTodoState] = useState([{ id: 0, todo: "What?" }]);
+  const [todoInput, setTodoInput] = useState("");
 
-  const handleClick = (event: React.BaseSyntheticEvent) => {
-    console.log({ target: event.target.value });
+  const createNewTodo = (todoText: string) => {
+    const newTodo = { id: todoState.length, todo: todoText };
+    setTodoState([...todoState, newTodo]);
   };
+
+  const handleSubmit = (event: BaseSyntheticEvent) => {
+    event.preventDefault();
+    createNewTodo(todoInput);
+    setTodoInput("");
+  };
+
+  const handleChange = (event: BaseSyntheticEvent) => {
+    setTodoInput(event.target.value);
+  };
+
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="input">What do you want to do?</label>
+          <input
+            name="input"
+            id="input"
+            className="border-red-500 border-solid border-4"
+            value={todoInput}
+            onChange={handleChange}
+          />
+        </form>
+        {todoState.map(({ id, todo }) => (
+          <div key={id}>{todo}</div>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <button onClick={handleClick}>Some more things</button>
     </>
   );
 }
