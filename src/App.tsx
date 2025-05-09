@@ -3,12 +3,13 @@ import { BaseSyntheticEvent, useState } from "react";
 import "./App.css";
 
 function App() {
-  // const [count, setCount] = useState(0);
-  const [todoState, setTodoState] = useState([{ id: 0, todo: "What?" }]);
+  const [todoState, setTodoState] = useState([
+    { id: Date.now(), todo: "What?", completed: false },
+  ]);
   const [todoInput, setTodoInput] = useState("");
 
   const createNewTodo = (todoText: string) => {
-    const newTodo = { id: todoState.length, todo: todoText };
+    const newTodo = { id: Date.now(), todo: todoText, completed: false };
     setTodoState([...todoState, newTodo]);
   };
 
@@ -20,6 +21,28 @@ function App() {
 
   const handleChange = (event: BaseSyntheticEvent) => {
     setTodoInput(event.target.value);
+  };
+
+  const handleCheckTodo = ({
+    id,
+    completed,
+  }: {
+    id: number;
+    completed: boolean;
+  }) => {
+    const changedTodo = todoState.filter((todos) => todos.id === id);
+    // update the changed todo
+    changedTodo[0].completed = !completed;
+    // update the todo state appropriately
+    setTodoState((prevState) => {
+      const todosToKeep = prevState.filter((prevTodo) => prevTodo.id !== id);
+      // place the todos back into the order you originally found them
+      return [...todosToKeep, ...changedTodo].sort((a, b) => a.id - b.id);
+    });
+  };
+
+  const handleDelete = (id: number) => {
+    setTodoState((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -36,8 +59,22 @@ function App() {
             onChange={handleChange}
           />
         </form>
-        {todoState.map(({ id, todo }) => (
-          <div key={id}>{todo}</div>
+        {todoState.map(({ id, todo, completed }) => (
+          <div key={id} className="border-solid border-4">
+            <input
+              type="checkbox"
+              className="border-solid border-4"
+              checked={completed}
+              onChange={() => handleCheckTodo({ id, completed })}
+            />
+            {todo}
+            <button
+              onClick={() => handleDelete(id)}
+              className="border-solid border-3"
+            >
+              Delete
+            </button>
+          </div>
         ))}
       </div>
     </>
