@@ -1,12 +1,21 @@
-// import { useState } from "react";
-import { BaseSyntheticEvent, useState } from "react";
+import { BaseSyntheticEvent, useEffect, useState } from "react";
 import "./App.css";
 
+type Todo = {
+  id: number;
+  completed: boolean;
+  todo: string;
+};
+
 function App() {
-  const [todoState, setTodoState] = useState([
-    { id: Date.now(), todo: "What?", completed: false },
-  ]);
+  const [todoState, setTodoState] = useState<Todo[] | []>(
+    JSON.parse(localStorage.getItem("items") || "[]") || [],
+  );
   const [todoInput, setTodoInput] = useState("");
+
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(todoState));
+  }, [todoState]);
 
   const createNewTodo = (todoText: string) => {
     const newTodo = { id: Date.now(), todo: todoText, completed: false };
@@ -52,30 +61,34 @@ function App() {
         <form onSubmit={handleSubmit}>
           <label htmlFor="input">What do you want to do?</label>
           <input
+            data-testid="todo-input"
             name="input"
             id="input"
             className="border-red-500 border-solid border-4"
             value={todoInput}
             onChange={handleChange}
+            type="text"
           />
         </form>
-        {todoState.map(({ id, todo, completed }) => (
-          <div key={id} className="border-solid border-4">
-            <input
-              type="checkbox"
-              className="border-solid border-4"
-              checked={completed}
-              onChange={() => handleCheckTodo({ id, completed })}
-            />
-            {todo}
-            <button
-              onClick={() => handleDelete(id)}
-              className="border-solid border-3"
-            >
-              Delete
-            </button>
-          </div>
-        ))}
+        {todoState &&
+          todoState.map(({ id, todo, completed }) => (
+            <div key={id} className="border-solid border-4">
+              <input
+                data-testid="todo-checkbox"
+                type="checkbox"
+                className="border-solid border-4"
+                checked={completed}
+                onChange={() => handleCheckTodo({ id, completed })}
+              />
+              {todo}
+              <button
+                onClick={() => handleDelete(id)}
+                className="border-solid border-3"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
       </div>
     </>
   );
