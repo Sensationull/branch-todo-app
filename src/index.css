@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+/*
+Branch Colors for branding
+primary-header-text-green: hsl(138, 54%, 42%);
+accent-brand-text-green:hsl(137, 52%, 48%)
+primary-button-blue: hsl(187, 55%, 64%);
+header-gray: hsl(220, 15%, 20%);
+primary-text-gray: hsl(202, 8%, 19%);
+secondary-text-gray: hsl(225, 4%, 43%);
+
+*/
+:root {
+    --primary-header-text-green: hsl(138, 54%, 42%);
+}
