@@ -17,10 +17,7 @@ function App() {
   return (
     <main className="border-solid border-4 flex flex-col border-lime-500 h-svh p-16">
       <form onSubmit={handleSubmit} className="flex flex-col justify-center">
-        <label
-          htmlFor="input"
-          className="text-5xl text-[color:--primary-header-text-green] mb-4"
-        >
+        <label htmlFor="input" className="text-5xl text-primary-header mb-4">
           Branch Todos
         </label>
         <div className="flex justify-between gap-x-4">
@@ -28,14 +25,14 @@ function App() {
             data-testid="todo-input"
             name="input"
             id="input"
-            className="h-12 w-full border-b-2 mb-4 border-b-[color:--primary-header-text-green] pl-2"
+            className="h-12 w-full border-b-2 mb-4 border-b-primary-header pl-2"
             value={todoInput}
             onChange={handleChange}
             placeholder="What do you need to do?"
             type="text"
           />
           <button
-            className="flex justify-center items-center border-none size-12 rounded-[50%] bg-[--primary-header-text-green] hover:bg-[--accent-brand-text-green]"
+            className="flex justify-center items-center border-none size-12 rounded-[50%] bg-primary-header hover:bg-accent-brand"
             type="submit"
           >
             <PlusIcon className="size-5 fill-white" />
@@ -47,11 +44,11 @@ function App() {
           todoState.map(({ id, todo, completed }) => (
             <div
               key={id}
-              className="border-solid border-2 rounded-[24px] flex justify-between pl-6 pr-8 min-h-12 gap-x-[2px] hover:bg-[color:--accent-bg-gray]"
+              className="border-solid border-2 rounded-[24px] flex justify-between pl-6 pr-8 min-h-12 gap-x-[2px] hover:bg-accent-bg"
             >
-              <label className="flex gap-x-[16px] text-[color:--primary-text-gray] h-full items-center w-full cursor-pointer truncate">
+              <label className="flex gap-x-[16px] text-primary-text h-full items-center w-full cursor-pointer truncate">
                 <div className="inline-flex items-center">
-                  <label className="flex items-center cursor-pointer relative text-[color:--primary-text-gray]">
+                  <label className="flex items-center cursor-pointer relative text-primary-text">
                     <input
                       type="checkbox"
                       checked={completed}
@@ -70,7 +67,7 @@ function App() {
                 onClick={() => handleDelete(id)}
                 className="border-solid border-3"
               >
-                <CloseIcon className="size-3 fill-(--desctructive-red-primary)" />
+                <CloseIcon className="size-3 hover:fill-destructive" />
               </button>
             </div>
           ))}

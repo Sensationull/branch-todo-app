@@ -15,12 +15,12 @@ secondary-text-gray: hsl(225, 4%, 43%);
 
 */
 :root {
-    --primary-header-text-green: hsl(138, 54%, 42%);
-    --accent-brand-text-green:hsl(137, 65%, 58%);
-    --primary-text-gray:hsl(202, 8%, 19%);
-    --accent-bg-gray:hsl(220, 13%, 91%);
-    --primary-button-blue: hsl(189, 59%, 64%);
-    --accent-button-blue: hsl(187, 63%, 67%);
-    --destructive-red-primary: hsl(360, 72%, 53%);
+    --primary-header-text-green: 138 54% 42%;
+    --accent-brand-text-green: 137 65% 58%;
+    --primary-text-gray: 202 8% 19%;
+    --accent-bg-gray: 220 13% 91%;
+    --primary-button-blue: 189 59% 64%;
+    --accent-button-blue: 187 63% 67%;
+    --destructive-red-primary: 360 72% 53%;
 }
 
