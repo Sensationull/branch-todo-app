@@ -19,7 +19,7 @@ function App() {
       >
         <label
           htmlFor="input"
-          className="text-5xl text-[color:--primary-header-text-green]"
+          className="text-5xl text-[color:--primary-header-text-green] mb-4"
         >
           Branch Todos
         </label>
@@ -27,32 +27,39 @@ function App() {
           data-testid="todo-input"
           name="input"
           id="input"
-          className="border-b-red-500 border-solid border-4"
+          className="border-b-red-500 border-solid border-b-2 mb-4"
           value={todoInput}
           onChange={handleChange}
           placeholder="Add new task"
           type="text"
         />
       </form>
-      {todoState &&
-        todoState.map(({ id, todo, completed }) => (
-          <div key={id} className="border-solid border-4">
-            <input
-              data-testid="todo-checkbox"
-              type="checkbox"
-              className="border-solid border-4"
-              checked={completed}
-              onChange={() => handleCheckTodo({ id, completed })}
-            />
-            {todo}
-            <button
-              onClick={() => handleDelete(id)}
-              className="border-solid border-3"
+      <section className="border-lime-500 border-2 flex flex-col p-4 gap-4">
+        {todoState &&
+          todoState.map(({ id, todo, completed }) => (
+            <div
+              key={id}
+              className="border-solid border-2 rounded-[24px] flex justify-between px-4"
             >
-              Delete
-            </button>
-          </div>
-        ))}
+              <label className="flex border-2 justify-between text-[color:--primary-header-text-green]">
+                <input
+                  data-testid="todo-checkbox"
+                  type="checkbox"
+                  className="border-solid border-4"
+                  checked={completed}
+                  onChange={() => handleCheckTodo({ id, completed })}
+                />
+                {todo}
+              </label>
+              <button
+                onClick={() => handleDelete(id)}
+                className="border-solid border-3"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+      </section>
     </main>
   );
 }
