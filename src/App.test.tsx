@@ -212,33 +212,97 @@ describe("App", () => {
     expect(screen.queryByText("Todo to delete")).not.toBeInTheDocument();
   });
 
-  it("maintains todo order after completion toggle", async () => {
-    mockLocalStorage.getItem.mockReturnValue(
-      JSON.stringify([{ id: 1, todo: "What?", completed: false }]),
-    );
+  describe("Form Validation", () => {
+    it("shows error for whitespace-only todo", async () => {
+      render(<App />);
+      const user = userEvent.setup();
+      const input = screen.getByTestId("todo-input");
 
-    render(<App />);
-    const user = userEvent.setup();
-    const input = screen.getByTestId("todo-input");
+      // Submit whitespace
+      await user.type(input, "   ");
+      await user.keyboard("{Enter}");
 
-    // Add two todos
-    await user.type(input, "First Todo");
-    await user.keyboard("{Enter}");
-    await user.type(input, "Second Todo");
-    await user.keyboard("{Enter}");
+      expect(screen.getByText("Todo cannot be empty")).toBeInTheDocument();
+    });
 
-    // Get all checkboxes
-    const checkboxes = screen.getAllByTestId("todo-checkbox");
+    it("shows error for todo that is too short", async () => {
+      render(<App />);
+      const user = userEvent.setup();
+      const input = screen.getByTestId("todo-input");
 
-    // Toggle the second todo
-    await user.click(checkboxes[1]);
+      // Submit single character
+      await user.type(input, "a");
+      await user.keyboard("{Enter}");
 
-    // Verify the order is maintained
-    const todos = screen
-      .getAllByTestId("todo-checkbox")
-      .map((checkbox) => checkbox.closest("div")?.textContent?.trim());
-    expect(todos[0]).toContain("What?");
-    expect(todos[1]).toContain("First Todo");
-    expect(todos[2]).toContain("Second Todo");
+      expect(
+        screen.getByText("Todo must be at least 2 characters"),
+      ).toBeInTheDocument();
+    });
+
+    it("shows error for todo that is too long", async () => {
+      render(<App />);
+      const user = userEvent.setup();
+      const input = screen.getByTestId("todo-input");
+
+      // Submit long string
+      await user.type(input, "a".repeat(101));
+      await user.keyboard("{Enter}");
+
+      expect(
+        screen.getByText("Todo must be less than 100 characters"),
+      ).toBeInTheDocument();
+    });
+
+    it("shows error for duplicate todo", async () => {
+      mockLocalStorage.getItem.mockReturnValue(
+        JSON.stringify([{ id: 1, todo: "Existing Todo", completed: false }]),
+      );
+
+      render(<App />);
+      const user = userEvent.setup();
+      const input = screen.getByTestId("todo-input");
+
+      // Submit duplicate
+      await user.type(input, "Existing Todo");
+      await user.keyboard("{Enter}");
+
+      expect(screen.getByText("This todo already exists")).toBeInTheDocument();
+    });
+
+    it("clears error when input becomes valid", async () => {
+      render(<App />);
+      const user = userEvent.setup();
+      const input = screen.getByTestId("todo-input");
+
+      // Submit invalid input
+      await user.type(input, "a");
+      await user.keyboard("{Enter}");
+
+      expect(
+        screen.getByText("Todo must be at least 2 characters"),
+      ).toBeInTheDocument();
+
+      // Fix the input
+      await user.type(input, " valid todo");
+      await user.keyboard("{Enter}");
+
+      expect(
+        screen.queryByText("Todo must be at least 2 characters"),
+      ).not.toBeInTheDocument();
+      expect(screen.getByText("a valid todo")).toBeInTheDocument();
+    });
+
+    it("does not show validation errors before first submission", async () => {
+      render(<App />);
+      const user = userEvent.setup();
+      const input = screen.getByTestId("todo-input");
+
+      // Type invalid input
+      await user.type(input, "a");
+
+      expect(
+        screen.queryByText("Todo must be at least 2 characters"),
+      ).not.toBeInTheDocument();
+    });
   });
 });

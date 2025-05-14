@@ -1,11 +1,14 @@
 import { BaseSyntheticEvent, useEffect, useState } from "react";
 import { Todo } from "./types";
+import { ValidationError, errorMessages, validateTodo } from "./validation";
 
 export const useTodo = () => {
   const [todoState, setTodoState] = useState<Todo[] | []>(
     JSON.parse(localStorage.getItem("items") || "[]") || [],
   );
   const [todoInput, setTodoInput] = useState("");
+  const [error, setError] = useState<ValidationError | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     localStorage.setItem("items", JSON.stringify(todoState));
@@ -18,12 +21,29 @@ export const useTodo = () => {
 
   const handleSubmit = (event: BaseSyntheticEvent) => {
     event.preventDefault();
+    setIsDirty(true);
+
+    const validation = validateTodo(todoInput, todoState);
+
+    if (!validation.isValid) {
+      setError(validation.error!);
+      return;
+    }
+
     createNewTodo(todoInput);
     setTodoInput("");
+    setError(null);
+    setIsDirty(false);
   };
 
   const handleChange = (event: BaseSyntheticEvent) => {
-    setTodoInput(event.target.value);
+    const value = event.target.value;
+    setTodoInput(value);
+
+    if (isDirty) {
+      const validation = validateTodo(value, todoState);
+      setError(validation.isValid ? null : validation.error!);
+    }
   };
 
   const handleCheckTodo = ({
@@ -51,6 +71,7 @@ export const useTodo = () => {
   return {
     todoState,
     todoInput,
+    error: error ? errorMessages[error] : null,
     handleSubmit,
     handleChange,
     handleCheckTodo,
