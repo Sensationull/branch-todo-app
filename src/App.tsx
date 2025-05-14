@@ -15,8 +15,11 @@ function App() {
   } = useTodo();
 
   return (
-    <main className="border-solid border-4 flex flex-col border-lime-500 h-svh p-16">
-      <form onSubmit={handleSubmit} className="flex flex-col justify-center">
+    <main className="border-solid border-8 flex flex-col border-lime-500 h-svh p-16 items-center bg-slate-50">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col justify-center w-full max-w-4xl"
+      >
         <label htmlFor="input" className="text-5xl text-primary-header mb-4">
           Branch Todos
         </label>
@@ -25,29 +28,30 @@ function App() {
             data-testid="todo-input"
             name="input"
             id="input"
-            className="h-12 w-full border-b-2 mb-4 border-b-primary-header pl-2"
+            className="h-12 w-full border-b-2 mb-4 border-b-primary-header pl-2 bg-slate-50"
             value={todoInput}
             onChange={handleChange}
             placeholder="What do you need to do?"
             type="text"
           />
           <button
-            className="flex justify-center items-center border-none size-12 rounded-[50%] bg-primary-header hover:bg-accent-brand"
+            className="flex justify-center items-center border-none size-12 rounded-[25%] bg-primary-header hover:bg-accent-brand shadow-[0_2px_4px_rgba(132,204,22,0.2)] hover:shadow-[0_4px_8px_rgba(132,204,22,0.3)] transition-shadow duration-200 shrink-0"
             type="submit"
           >
             <PlusIcon className="size-5 fill-white" />
           </button>
         </div>
       </form>
-      <section className="flex flex-col py-4 gap-4 overflow-scroll">
+      <section className="flex flex-col py-4 gap-4 w-full overflow-scroll max-w-4xl">
         {todoState &&
-          todoState.map(({ id, todo, completed }) => (
+          todoState.map(({ id, todo, completed }, index) => (
             <div
               key={id}
-              className="border-solid border-2 rounded-[24px] flex justify-between pl-6 pr-8 min-h-12 gap-x-[2px] hover:bg-accent-bg"
+              style={{ animationDelay: `${index * 200}ms` }}
+              className="border-solid border-2 rounded-[24px] flex justify-between pl-6 pr-8 min-h-12 hover:bg-accent-bg shadow-[0_2px_4px_rgba(132,204,22,0.2)] hover:shadow-[0_4px_8px_rgba(132,204,22,0.3)] transition-shadow duration-200 animate-fade-in opacity-0"
             >
-              <label className="flex gap-x-[16px] text-primary-text h-full items-center w-full cursor-pointer truncate">
-                <div className="inline-flex items-center">
+              <label className="flex py-4 gap-x-[12px] text-primary-text h-full items-center w-full cursor-pointer text-wrap truncate">
+                <div className="inline-flex items-center gap-y-[4px]">
                   <label className="flex items-center cursor-pointer relative text-primary-text">
                     <input
                       type="checkbox"
