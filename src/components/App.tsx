@@ -1,7 +1,6 @@
-import "./App.css";
 import CloseIcon from "./CloseIcon";
 import CustomCheckbox from "./CustomCheckbox";
-import { useTodo } from "./helpers/useTodo";
+import { useTodo } from "../helpers/useTodo";
 import PlusIcon from "./PlusIcon";
 
 function App() {
