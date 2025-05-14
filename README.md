@@ -15,12 +15,16 @@ Welcome to Andrew Johnson's Branch Frontend Take-Home Assignment!
   You should see something like this:
   ![Homepage](/src/assets/Todo%20Screenshot.png)
 
-
 4. **Run the Tests** (optional) 
 - In another terminal window run the following operations
   ```bash
   npm test
   ```
+
+### Links
+
+- [Github](https://github.com/Sensationull/branch-todo-app)
+- [Live Site URL](https://branch-todo-app.vercel.app/)
 
 ### Built with
 
